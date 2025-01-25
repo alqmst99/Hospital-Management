@@ -6,12 +6,19 @@ package com.Hospital_App.Hospital.Management.System.DocLog.Controller;
 
 import com.Hospital_App.Hospital.Management.System.DocLog.Model.Appointment;
 import com.Hospital_App.Hospital.Management.System.DocLog.Repository.AppointmentRepo;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import javax.management.AttributeNotFoundException;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 /**
  *
@@ -37,5 +44,38 @@ public class AppointmentController {
     @GetMapping
     public List<Appointment>getAllAppoint() {
         return ar.findAll();
+    }
+    
+    @GetMapping( "/{id}")
+    public ResponseEntity<Appointment> getOneAppoint(@PathVariable long id) throws AttributeNotFoundException {
+        Appointment ap = ar.findById(id).orElseThrow(() -> new AttributeNotFoundException("Patient not found with id" + id));
+return ResponseEntity.ok(ap);
+    }
+    
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Map<String, Boolean>> deleteAppint(@PathVariable Long id) throws AttributeNotFoundException{
+        //Find appointment wiht id, or not exist lambda function throug error exception message
+   Appointment ap= ar.findById(id).orElseThrow(()-> new AttributeNotFoundException("Appointment not found with id"+ id));
+    ar.delete(ap);
+    Map<String,Boolean> response = new HashMap<String, Boolean>();
+    response.put("deleted", Boolean.TRUE);
+    return ResponseEntity.ok(response);
+    }
+    
+    @PutMapping("/update/{id}")
+     public ResponseEntity<Appointment> updateAppoint(@PathVariable Long id, @RequestBody Appointment a) throws AttributeNotFoundException {
+      Appointment ap = ar.findById(id).orElseThrow(() -> new AttributeNotFoundException("Appointment not found with id" + id));
+
+        ap.setAge(a.getAge());
+        ap.setName(a.getName());
+        ap.setNumber(a.getNumber());
+        ap.setSymptoms(a.getSymptoms());
+   
+        ap.setId(a.getId());
+        
+       Appointment saveA= ar.save(ap);
+        return ResponseEntity.ok(saveA);
+        
+        
     }
 }
