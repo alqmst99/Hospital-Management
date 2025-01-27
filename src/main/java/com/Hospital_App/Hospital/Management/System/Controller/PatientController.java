@@ -1,6 +1,6 @@
 package com.Hospital_App.Hospital.Management.System.Controller;
 
-import com.Hospital_App.Hospital.Management.System.DocLog.Model.Appointment;
+import com.Hospital_App.Hospital.Management.System.Model.Appointment;
 import com.Hospital_App.Hospital.Management.System.Model.Patient;
 import com.Hospital_App.Hospital.Management.System.Repository.PatientRepo;
 import java.util.HashMap;

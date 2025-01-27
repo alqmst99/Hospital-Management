@@ -1,11 +1,14 @@
 package com.Hospital_App.Hospital.Management.System.Model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
 
 /**
  *
@@ -34,30 +37,22 @@ public class Patient {
     private String prescription;
     
     @Column(name="dose")
-    private String dose;
+    private int dose;
     
     @Column(name="fees")
-    private String fees;
+    private double fees;
     
     @Column(name="urgency")
     private boolean urgency;
     
-    
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Appointment> appointment;
     //constructor void and complete
 
     public Patient() {
     }
 
-    public Patient(Long id, String first_name, int age, String blood, String prescription,  String dose, String fees, boolean urgency) {
-        this.id = id;
-        this.first_name = first_name;
-        this.age = age;
-        this.blood = blood;
-        this.prescription= prescription;
-        this.dose = dose;
-        this.fees = fees;
-        this.urgency = urgency;
-    }
+ 
     
     
     //Getter and Setters
@@ -103,19 +98,19 @@ public class Patient {
     }
 
     
-    public String getDose() {
+    public int getDose() {
         return dose;
     }
 
-    public void setDose(String dose) {
+    public void setDose(int dose) {
         this.dose = dose;
     }
 
-    public String getFees() {
+    public double getFees() {
         return fees;
     }
 
-    public void setFees(String fees) {
+    public void setFees(double fees) {
         this.fees = fees;
     }
 
@@ -125,6 +120,14 @@ public class Patient {
 
     public void setUrgency(boolean urgency) {
         this.urgency = urgency;
+    }
+
+    public List<Appointment> getAppointment() {
+        return appointment;
+    }
+
+    public void setAppointment(List<Appointment> appointment) {
+        this.appointment = appointment;
     }
     
     

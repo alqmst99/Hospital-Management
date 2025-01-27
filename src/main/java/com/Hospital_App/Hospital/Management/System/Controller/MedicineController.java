@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.Hospital_App.Hospital.Management.System.DocLog.Controller;
+package com.Hospital_App.Hospital.Management.System.Controller;
 
-import com.Hospital_App.Hospital.Management.System.DocLog.Model.Medicine;
-import com.Hospital_App.Hospital.Management.System.DocLog.Repository.MedicineRepo;
+import com.Hospital_App.Hospital.Management.System.Model.Medicine;
+import com.Hospital_App.Hospital.Management.System.Repository.MedicineRepo;
 import com.Hospital_App.Hospital.Management.System.Model.Patient;
 import java.util.HashMap;
 import java.util.List;

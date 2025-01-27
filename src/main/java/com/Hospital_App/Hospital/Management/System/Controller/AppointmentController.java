@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.Hospital_App.Hospital.Management.System.DocLog.Controller;
+package com.Hospital_App.Hospital.Management.System.Controller;
 
-import com.Hospital_App.Hospital.Management.System.DocLog.Model.Appointment;
-import com.Hospital_App.Hospital.Management.System.DocLog.Repository.AppointmentRepo;
+import com.Hospital_App.Hospital.Management.System.Model.Appointment;
+import com.Hospital_App.Hospital.Management.System.Repository.AppointmentRepo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,10 +66,12 @@ return ResponseEntity.ok(ap);
      public ResponseEntity<Appointment> updateAppoint(@PathVariable Long id, @RequestBody Appointment a) throws AttributeNotFoundException {
       Appointment ap = ar.findById(id).orElseThrow(() -> new AttributeNotFoundException("Appointment not found with id" + id));
 
-        ap.setAge(a.getAge());
-        ap.setName(a.getName());
-        ap.setNumber(a.getNumber());
-        ap.setSymptoms(a.getSymptoms());
+        ap.setDate(a.getDate());
+        ap.setHour(a.getHour());
+        ap.setContact(a.getContact());
+      
+        ap.setContact(a.getContact());
+        ap.setSymptomps(a.getSymptomps());
    
         ap.setId(a.getId());
         
