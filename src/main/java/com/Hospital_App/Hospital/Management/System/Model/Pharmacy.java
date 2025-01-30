@@ -2,16 +2,14 @@
 
 package com.Hospital_App.Hospital.Management.System.Model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.List;
 
 /**
  *
@@ -26,27 +24,42 @@ public class Pharmacy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "name")
-    private String name;
+  @ManyToOne
+  @JoinColumn(name = "medic_id", nullable = false)
+  @JsonIgnore
+  private Medic medic;
+  
+  @ManyToOne
+  @JoinColumn(name = "patient_id", nullable = false)
+  @JsonIgnore
+  private Patient patient;
+  
+  @ManyToOne
+  @JoinColumn(name = "Medicine_id", nullable = false)
+  private Medicine medicine;
+  
+  @JoinColumn(name = "quantity")
+  private int quantity;
+
+   
     
-    @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Medicine> medicine;
-    
+ 
     //Contructor void
 
-    public Pharmacy() {
+    public Pharmacy(Medic m, Patient p, Medicine md, int q) {
     }
 
-    public Pharmacy(Long id, String name, List<Medicine> medicine) {
+    public Pharmacy(Long id, Medic medic, Patient patient, Medicine medicine, int quantity) {
         this.id = id;
-        this.name = name;
+        this.medic = medic;
+        this.patient = patient;
         this.medicine = medicine;
+        this.quantity = quantity;
     }
     
     
     //Getters and Setters
-
-    public Long getId() {
+    public Long getId(){
         return id;
     }
 
@@ -54,21 +67,46 @@ public class Pharmacy {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Medic getMedic() {
+        return medic;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMedic(Medic medic) {
+        this.medic = medic;
     }
 
-    public List<Medicine> getMedicine() {
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Medicine getMedicine() {
         return medicine;
     }
 
-    public void setMedicine(List<Medicine> medicine) {
+    public void setMedicine(Medicine medicine) {
         this.medicine = medicine;
     }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
     
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    //Method minus stock
+    public boolean reduceStock(int q) {
+        if(this.quantity >= q){
+            this.quantity -= q;
+            return true;
+        }
+        return false;
+    }
     
 }

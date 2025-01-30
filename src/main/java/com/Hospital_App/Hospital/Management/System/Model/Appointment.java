@@ -1,7 +1,8 @@
 
 package com.Hospital_App.Hospital.Management.System.Model;
 
-import com. Hospital_App.Hospital.Management.System.Model.Medic;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,9 +22,13 @@ import jakarta.persistence.ManyToOne;
 @Entity(name= "appoinments")
 public class Appointment {
 
+    public static boolean isEmpty() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  long id;
+    private  Long id;
     
     @Column(name ="fecha")
     private String date;
@@ -38,11 +43,13 @@ public class Appointment {
     private int contact;
     
     @ManyToOne
-    @JoinColumn(name = "medico_id", nullable = false)
+    @JoinColumn(name = "medic_id", nullable = false)
+    @JsonIgnore
    private Medic medic;
     
      @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
+     @JsonIgnore
      private Patient patient;
 
 
@@ -55,11 +62,11 @@ public class Appointment {
     
     //Getters and Setters
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

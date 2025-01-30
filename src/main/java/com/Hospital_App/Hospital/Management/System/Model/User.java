@@ -2,15 +2,22 @@
 
 package com.Hospital_App.Hospital.Management.System.Model;
 
+import com.Hospital_App.Hospital.Management.System.Enum.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import javax.management.relation.Role;
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  *
@@ -29,21 +36,29 @@ public class User {
     @Column(name = "user_name",nullable = false, unique = true)
     private String username;
     
+    @Column(name = "password", nullable = false)
+    private String password;
+    
    // @Column(name= "password", nullable = false, unique = true)
     
-   /* @Enumerated(EnumType.STRING)
-    private Role role;*/
+   @ManyToMany(fetch = FetchType.EAGER)
+   @JoinTable(name = "user_rele", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
     
     //constructor void and complete
 
     public User() {
     }
 
-    public User(long id, String username, Role role) {
+    public User(long id, String username,String password ,Set<Role> roles) {
         this.id = id;
         this.username = username;
-        //this.role = role;
+        this.password= password;
+        this.roles = roles;
     }
+
+    
+  
     
     //Getter and Setters
 
@@ -63,14 +78,21 @@ public class User {
         this.username = username;
     }
 
-    /*public Role getRole() {
-        return role;
+    public String getPassword() {
+        return password;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }*/
-    
-    
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     
 }

@@ -1,6 +1,7 @@
 
 package com.Hospital_App.Hospital.Management.System.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,10 +36,10 @@ public class Medic {
     private String especiality;
     
     @OneToMany(mappedBy = "medic", cascade = CascadeType.ALL, orphanRemoval = true )
+    @JsonIgnore
     private List<Appointment> appointment;
     
-    @OneToMany (mappedBy = "medic", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Medicine> medicine;
+  
     
     
     //Contructor void and Complete
@@ -93,13 +94,7 @@ public class Medic {
         this.especiality = especiality;
     }
 
-    public List<Medicine> getMedicine() {
-        return medicine;
-    }
-
-    public void setMedicine(List<Medicine> medicine) {
-        this.medicine = medicine;
-    }
+   
     
     
 }

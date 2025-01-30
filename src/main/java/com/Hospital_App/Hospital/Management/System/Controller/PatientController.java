@@ -1,12 +1,11 @@
 package com.Hospital_App.Hospital.Management.System.Controller;
 
-import com.Hospital_App.Hospital.Management.System.Model.Appointment;
 import com.Hospital_App.Hospital.Management.System.Model.Patient;
-import com.Hospital_App.Hospital.Management.System.Repository.PatientRepo;
-import java.util.HashMap;
+import com.Hospital_App.Hospital.Management.System.Services.PatientService;
 import java.util.List;
 import java.util.Map;
 import javax.management.AttributeNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
@@ -28,56 +27,41 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/patient")
 public class PatientController {
 
-    private PatientRepo pr;
-
-    //generate constructor super class
-    public PatientController(PatientRepo pr) {
-        super();
-        this.pr = pr;
-    }
+    @Autowired
+    private PatientService ps;
 
     @PostMapping("/create")
     public Patient createPatient(@RequestBody Patient p) {
-        return pr.save(p);
+        return ps.createPatient(p);
     }
 
     @GetMapping
     public List<Patient> getAllPatient() {
-        return pr.findAll();
+        return ps.getAPatient();
     }
 
-    @GetMapping( "/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Patient> getOnePatient(@PathVariable long id) throws AttributeNotFoundException {
-        Patient ap = pr.findById(id).orElseThrow(() -> new AttributeNotFoundException("Patient not found with id" + id));
-return ResponseEntity.ok(ap);
+        Patient ap = ps.getPatientById(id);
+        return ap != null ? ResponseEntity.ok(ap) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Map<String, Boolean>> deletePatient(@PathVariable Long id) throws AttributeNotFoundException {
-        //Find Patient wiht id, or not exist lambda function throug error exception message
-        Patient ap = pr.findById(id).orElseThrow(() -> new AttributeNotFoundException("Patient not found with id" + id));
-        pr.delete(ap);
-        Map<String, Boolean> response = new HashMap<String, Boolean>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Map<String, Boolean>> deletePatient(@PathVariable Long id) {
+        //Find Patient wiht id, 
+        ps.deletePatient(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient pd) throws AttributeNotFoundException {
-        Patient ap = pr.findById(id).orElseThrow(() -> new AttributeNotFoundException("Patient not found with id" + id));
+    public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient pd) {
+        Patient ap = ps.getPatientById(id);
+        if (ap != null) {
 
-        ap.setAge(pd.getAge());
-        ap.setFirst_name(pd.getFirst_name());
-        ap.setBlood(pd.getBlood());
-        ap.setDose(pd.getDose());
-        ap.setFees(pd.getFees());
-        ap.setPrescription(pd.getPrescription());
-        ap.setUrgency(pd.getUrgency());
-        ap.setId(pd.getId());
-
-        Patient saveP = pr.save(ap);
-        return ResponseEntity.ok(saveP);
-
+            return ResponseEntity.ok(ps.updatePatient(id, ap));
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }

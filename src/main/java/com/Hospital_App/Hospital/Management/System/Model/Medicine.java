@@ -7,8 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -30,30 +28,23 @@ public class Medicine {
     @Column(name="stock")
     private int stock;
     
-    @ManyToOne
-    @JoinColumn(name="medico_id", nullable = false)
-    private Medic medic;
-    
-     @ManyToOne
-    @JoinColumn(name = "pharmacy_id")
-    private Pharmacy pharmacy;
 
-    public Pharmacy getPharmacy() {
-        return pharmacy;
-    }
-
-    public void setPharmacy(Pharmacy pharmacy) {
-        this.pharmacy = pharmacy;
-    }
+  
     
     //Constructor void and complete
 
     public Medicine() {
     }
 
-  
-    //Getters and Setters
+    public Medicine(long id, String drugName, int stock) {
+        this.id = id;
+        this.drugName = drugName;
+        this.stock = stock;
+    }
 
+    
+    
+    //Getters and Setters
     public long getId() {
         return id;
     }
@@ -78,14 +69,6 @@ public class Medicine {
         this.stock = stock;
     }
 
-    public Medic getMedic() {
-        return medic;
-    }
-
-    public void setMedic(Medic medic) {
-        this.medic = medic;
-    }
-    
-    
+  
     
 }
