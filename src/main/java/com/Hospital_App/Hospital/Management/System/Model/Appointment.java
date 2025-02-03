@@ -22,9 +22,7 @@ import jakarta.persistence.ManyToOne;
 @Entity(name= "appoinments")
 public class Appointment {
 
-    public static boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,12 +42,12 @@ public class Appointment {
     
     @ManyToOne
     @JoinColumn(name = "medic_id", nullable = false)
-    @JsonIgnore
+
    private Medic medic;
     
      @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
-     @JsonIgnore
+
      private Patient patient;
 
 

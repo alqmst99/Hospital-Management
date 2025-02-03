@@ -1,7 +1,9 @@
 package com.Hospital_App.Hospital.Management.System.Services;
 
+import com.Hospital_App.Hospital.Management.System.Enum.Role;
 import com.Hospital_App.Hospital.Management.System.Model.User;
 import com.Hospital_App.Hospital.Management.System.Repository.UserRepo;
+import java.util.Collections;
 import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class UserService {
     
     public User registerUser(User u){
         u.setPassword(bc.encode(u.getPassword()));
+        if (u.getRoles() == null || u.getRoles().isEmpty()) {
+        u.setRoles(Collections.singleton(Role.PATIENT)); // Puedes cambiar el rol por defecto
+    }
         return ur.save(u);
     }
     

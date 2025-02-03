@@ -10,6 +10,10 @@ import com.Hospital_App.Hospital.Management.System.Model.Medicine;
 import com.Hospital_App.Hospital.Management.System.Model.Patient;
 import com.Hospital_App.Hospital.Management.System.Model.Pharmacy;
 import com.Hospital_App.Hospital.Management.System.Services.PharmacyService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +34,15 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/v1/pharmacy")
+@Tag(name = "Pharmacy", description = "Pharmacy management")
+@SecurityRequirement(name = "BararAuth")
 public class PharmacyController {
  @Autowired
     PharmacyService ms;
 
     @PostMapping("/create")
+        @Operation(summary = "Create a new Pharmacy")
+    @ApiResponse(responseCode = "201",description = "Pharmacy successfully created")
     public ResponseEntity<Pharmacy> saveM(@RequestParam Long medicId, @RequestParam Long patientId, @RequestParam Long medicineId, @RequestParam int q) {
        Medic m= new Medic();
        m.setId(medicId);
@@ -52,17 +60,23 @@ public class PharmacyController {
     }
 
     @GetMapping
+        @Operation(summary = "Get All Pharmacy")
+    @ApiResponse(responseCode = "200",description = "Pharmacy successfully get list")
     public List<Pharmacy> getAllAppoint() {
         return ms.getAllPharmacies();
     }
 
     @GetMapping("/{id}")
+      @Operation(summary = "Get All Pharmacy")
+    @ApiResponse(responseCode = "200", description = "Successful Pharmacy list")
     public ResponseEntity<Pharmacy> getOneAppoint(@PathVariable long id) {
         Pharmacy m = ms.getPharmacyById(id);
         return m != null ? ResponseEntity.ok(m) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete/{id}")
+     @Operation(summary = "Delete Pharmacy by Id")
+    @ApiResponse(responseCode = "204", description = "Successful Pharmacy delete")
     public ResponseEntity<Void> deleteAppint(@PathVariable Long id) {
         //Find appointment wiht id
         Pharmacy m = ms.getPharmacyById(id);
@@ -74,6 +88,8 @@ public class PharmacyController {
     }
 
     @PutMapping("/update/{id}")
+      @Operation(summary = "Update Pharmacy by id")
+    @ApiResponse(responseCode = "200", description = "Successful Pharmacy Update")
     public ResponseEntity<Pharmacy> updateAppoint(@PathVariable Long id, @RequestBody Pharmacy m) {
         Pharmacy mp = ms.getPharmacyById(id);
 

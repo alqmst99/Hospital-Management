@@ -1,7 +1,6 @@
 
 package com.Hospital_App.Hospital.Management.System.Segurity;
 
-import io.Jsonwebtoken.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY= "M@rina995";
+    private final String SECRET_KEY= "mysupersecuresecretkeythatismorethan32bytes";
     private final long EXPIRATION_TIME= 86400000;
     
     

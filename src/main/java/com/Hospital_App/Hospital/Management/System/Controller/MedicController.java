@@ -6,6 +6,10 @@ package com.Hospital_App.Hospital.Management.System.Controller;
 
 import com.Hospital_App.Hospital.Management.System.Model.Medic;
 import com.Hospital_App.Hospital.Management.System.Services.MedicServices;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,28 +29,38 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/v1/medic")
+@Tag(name = "Medic", description = "Medic management")
+@SecurityRequirement(name = "BararAuth")
 public class MedicController {
 
     @Autowired
     MedicServices ms;
 
     @PostMapping("/create")
+    @Operation(summary = "Create a new Medic")
+    @ApiResponse(responseCode = "201",description = "Medic successfully created")
     public Medic saveM(@RequestBody Medic m) {
         return ms.createMedic(m);
     }
 
     @GetMapping
+    @Operation(summary = "Get All Medic")
+    @ApiResponse(responseCode = "200", description = "Successful Medic list")
     public List<Medic> getAllAppoint() {
         return ms.getAMedic();
     }
 
     @GetMapping("/{id}")
+     @Operation(summary = "Get One Medic by  Id")
+    @ApiResponse(responseCode = "200", description = "Successful get Medic ")
     public ResponseEntity<Medic> getOneAppoint(@PathVariable long id) {
         Medic m = ms.getMedicById(id);
         return m != null ? ResponseEntity.ok(m) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete/{id}")
+     @Operation(summary = "Delete Medic by Id")
+    @ApiResponse(responseCode = "204", description = "Successful Medic delete")
     public ResponseEntity<Void> deleteAppint(@PathVariable Long id) {
         //Find appointment wiht id
         Medic m = ms.getMedicById(id);
@@ -57,7 +71,9 @@ public class MedicController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/{id}")      @Operation(summary = "Update Medic by id")
+    @ApiResponse(responseCode = "200", description = "Successful Medic Update")
+
     public ResponseEntity<Medic> updateAppoint(@PathVariable Long id, @RequestBody Medic m) {
         Medic mp = ms.getMedicById(id);
 
