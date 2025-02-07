@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,8 @@ public class MedicineController {
     @PostMapping("/create")
     @Operation(summary = "Create a new patient")
     @ApiResponse(responseCode = "201",description = "Patient successfully created")
+         @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
+
     public ResponseEntity<Medicine> CreateMed(@RequestBody Medicine md) {
          Medicine m =mr.createMedicine(md);
 
@@ -46,6 +49,8 @@ public class MedicineController {
     @GetMapping
            @Operation(summary = "Get All Patients")
     @ApiResponse(responseCode = "200", description = "Successful patient list")
+         @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
+
     public List<Medicine> getAllMed() {
         return mr.getAMedicine();
     }
@@ -53,6 +58,8 @@ public class MedicineController {
     @GetMapping("/{id}")
              @Operation(summary = "Get One Patients by  Id")
     @ApiResponse(responseCode = "200", description = "Successful get patient ")
+         @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
+
     public ResponseEntity<Medicine> getOneMedicine(@PathVariable long id) {
         Medicine mp = mr.getMedicineById(id);
         return ResponseEntity.ok(mp);
@@ -61,6 +68,7 @@ public class MedicineController {
     @DeleteMapping("/delete/{id}")
              @Operation(summary = "Delete Patient by Id")
     @ApiResponse(responseCode = "204", description = "Successful patient delete")
+     @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
     public ResponseEntity<Map<String, Boolean>> deleteMedicine(@PathVariable Long id) {
         //Find Medicine wiht id, or not exist lambda function throug error exception message
         Medicine ap = mr.getMedicineById(id);
@@ -76,6 +84,7 @@ public class MedicineController {
     @PutMapping("/update/{id}")
       @Operation(summary = "Update Patients by id")
     @ApiResponse(responseCode = "200", description = "Successful patient Update")
+     @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
     public ResponseEntity<Medicine> updateMedicine(@PathVariable Long id, @RequestBody Medicine m) {
         Medicine md = mr.getMedicineById(id);
         if (md != null) {

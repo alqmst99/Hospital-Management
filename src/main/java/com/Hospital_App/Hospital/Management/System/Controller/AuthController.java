@@ -4,13 +4,17 @@ package com.Hospital_App.Hospital.Management.System.Controller;
 
 import com.Hospital_App.Hospital.Management.System.Model.User;
 import com.Hospital_App.Hospital.Management.System.Segurity.JwtUtil;
+import com.Hospital_App.Hospital.Management.System.Services.TokenBlackListService;
 import com.Hospital_App.Hospital.Management.System.Services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,10 +30,16 @@ public class AuthController {
 
     private final UserService us;
     private final JwtUtil ju;
+    private final TokenBlackListService tb;
     
-    public AuthController (UserService us, JwtUtil ju){
+    
+   
+    
+    
+    public AuthController (UserService us, JwtUtil ju, TokenBlackListService tb){
         this.us= us;
         this.ju= ju;
+        this.tb= tb;
     }
     
     
@@ -54,4 +64,17 @@ public class AuthController {
             throw new RuntimeException("The User or password incorrects");
         }
     }
+    
+    
+    @PostMapping("/logout")
+    @Operation(summary = "Logout user and ivalidate token")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<String> logOut(@RequestHeader ("Authorization") String token){
+        tb.invalidateToken(token);
+        return ResponseEntity.ok("Logout success");
+        
+    }
+
+
+
 }

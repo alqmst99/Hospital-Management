@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.Hospital_App.Hospital.Management.System.Controller;
 
 import com.Hospital_App.Hospital.Management.System.Model.Medic;
@@ -13,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +37,8 @@ public class MedicController {
     @PostMapping("/create")
     @Operation(summary = "Create a new Medic")
     @ApiResponse(responseCode = "201",description = "Medic successfully created")
+             @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
+
     public Medic saveM(@RequestBody Medic m) {
         return ms.createMedic(m);
     }
@@ -46,6 +46,8 @@ public class MedicController {
     @GetMapping
     @Operation(summary = "Get All Medic")
     @ApiResponse(responseCode = "200", description = "Successful Medic list")
+             @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
+
     public List<Medic> getAllAppoint() {
         return ms.getAMedic();
     }
@@ -53,6 +55,8 @@ public class MedicController {
     @GetMapping("/{id}")
      @Operation(summary = "Get One Medic by  Id")
     @ApiResponse(responseCode = "200", description = "Successful get Medic ")
+             @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
+
     public ResponseEntity<Medic> getOneAppoint(@PathVariable long id) {
         Medic m = ms.getMedicById(id);
         return m != null ? ResponseEntity.ok(m) : ResponseEntity.notFound().build();
@@ -61,6 +65,8 @@ public class MedicController {
     @DeleteMapping("/delete/{id}")
      @Operation(summary = "Delete Medic by Id")
     @ApiResponse(responseCode = "204", description = "Successful Medic delete")
+             @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
+
     public ResponseEntity<Void> deleteAppint(@PathVariable Long id) {
         //Find appointment wiht id
         Medic m = ms.getMedicById(id);
@@ -73,6 +79,7 @@ public class MedicController {
 
     @PutMapping("/update/{id}")      @Operation(summary = "Update Medic by id")
     @ApiResponse(responseCode = "200", description = "Successful Medic Update")
+         @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
 
     public ResponseEntity<Medic> updateAppoint(@PathVariable Long id, @RequestBody Medic m) {
         Medic mp = ms.getMedicById(id);

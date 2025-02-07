@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.management.AttributeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +40,8 @@ public class PatientController {
     @PostMapping("/create")
     @Operation(summary = "Create a new patient")
     @ApiResponse(responseCode = "201",description = "Patient successfully created")
+         @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
+
     public Patient createPatient(@RequestBody Patient p) {
         return ps.createPatient(p);
     }
@@ -46,6 +49,8 @@ public class PatientController {
     @GetMapping
     @Operation(summary = "Get All Patients")
     @ApiResponse(responseCode = "200", description = "Successful patient list")
+         @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
+
     public List<Patient> getAllPatient() {
         return ps.getAPatient();
     }
@@ -53,6 +58,8 @@ public class PatientController {
     @GetMapping("/{id}")
      @Operation(summary = "Get One Patients by  Id")
     @ApiResponse(responseCode = "200", description = "Successful get patient ")
+         @PreAuthorize("hasRole('ADMIN' or hasRole('MEDIC'))") // Solo ADMIN puede crear pacientes
+
     public ResponseEntity<Patient> getOnePatient(@PathVariable long id) throws AttributeNotFoundException {
         Patient ap = ps.getPatientById(id);
         return ap != null ? ResponseEntity.ok(ap) : ResponseEntity.notFound().build();
@@ -61,6 +68,7 @@ public class PatientController {
     @DeleteMapping("/delete/{id}")
      @Operation(summary = "Delete Patient by Id")
     @ApiResponse(responseCode = "204", description = "Successful patient delete")
+    @PreAuthorize("hasRole('ADMIN' or hasRole('MEDIC'))")
     public ResponseEntity<Map<String, Boolean>> deletePatient(@PathVariable Long id) {
         //Find Patient wiht id, 
         ps.deletePatient(id);
@@ -71,6 +79,8 @@ public class PatientController {
     @PutMapping("/update/{id}")
      @Operation(summary = "Update Patients by id")
     @ApiResponse(responseCode = "200", description = "Successful patient Update")
+             @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
+
     public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient pd) {
         Patient ap = ps.getPatientById(id);
         if (ap != null) {

@@ -12,5 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author NahueL N. Pierini
  */
 public interface MedicRepo extends JpaRepository<Medic, Long> {
-    
+    Medic findByMatricula(String matricula);
 }

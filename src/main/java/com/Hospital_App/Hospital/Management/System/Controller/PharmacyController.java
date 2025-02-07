@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,8 @@ public class PharmacyController {
     @PostMapping("/create")
         @Operation(summary = "Create a new Pharmacy")
     @ApiResponse(responseCode = "201",description = "Pharmacy successfully created")
+             @PreAuthorize("hasRole('ADMIN') or hasRole('MEDIC')") // Solo ADMIN puede crear pacientes
+
     public ResponseEntity<Pharmacy> saveM(@RequestParam Long medicId, @RequestParam Long patientId, @RequestParam Long medicineId, @RequestParam int q) {
        Medic m= new Medic();
        m.setId(medicId);
@@ -62,6 +65,8 @@ public class PharmacyController {
     @GetMapping
         @Operation(summary = "Get All Pharmacy")
     @ApiResponse(responseCode = "200",description = "Pharmacy successfully get list")
+             @PreAuthorize("hasRole('ADMIN')") // Solo ADMIN puede crear pacientes
+
     public List<Pharmacy> getAllAppoint() {
         return ms.getAllPharmacies();
     }
@@ -69,6 +74,8 @@ public class PharmacyController {
     @GetMapping("/{id}")
       @Operation(summary = "Get All Pharmacy")
     @ApiResponse(responseCode = "200", description = "Successful Pharmacy list")
+             @PreAuthorize("hasRole('ADMIN' or hasRole('MEDIC'))") // Solo ADMIN puede crear pacientes
+
     public ResponseEntity<Pharmacy> getOneAppoint(@PathVariable long id) {
         Pharmacy m = ms.getPharmacyById(id);
         return m != null ? ResponseEntity.ok(m) : ResponseEntity.notFound().build();
@@ -77,6 +84,8 @@ public class PharmacyController {
     @DeleteMapping("/delete/{id}")
      @Operation(summary = "Delete Pharmacy by Id")
     @ApiResponse(responseCode = "204", description = "Successful Pharmacy delete")
+             @PreAuthorize("hasRole('ADMIN') or hasRole('MEDIC')") // Solo ADMIN puede crear pacientes
+
     public ResponseEntity<Void> deleteAppint(@PathVariable Long id) {
         //Find appointment wiht id
         Pharmacy m = ms.getPharmacyById(id);
@@ -90,6 +99,8 @@ public class PharmacyController {
     @PutMapping("/update/{id}")
       @Operation(summary = "Update Pharmacy by id")
     @ApiResponse(responseCode = "200", description = "Successful Pharmacy Update")
+             @PreAuthorize("hasRole('ADMIN') or hasRole('MEDIC')") // Solo ADMIN puede crear pacientes
+
     public ResponseEntity<Pharmacy> updateAppoint(@PathVariable Long id, @RequestBody Pharmacy m) {
         Pharmacy mp = ms.getPharmacyById(id);
 
